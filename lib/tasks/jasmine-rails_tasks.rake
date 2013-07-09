@@ -20,7 +20,10 @@ namespace :spec do
     path = JasmineRails.route_path
     app.get path, :console => 'true', :spec => spec_filter
     JasmineRails::OfflineAssetPaths.disabled = true
-    raise "Jasmine runner at '#{path}' returned a #{app.response.status} error: #{app.response.message}" unless app.response.success?
+    unless app.response.success?
+      exception = Nokogiri::HTML.parse(app.response.body).at('pre, .exception').text.squish
+      raise "Jasmine runner at '#{path}' returned a #{app.response.status} error: #{app.response.message}\n#{exception}"
+    end
     html = app.response.body
     runner_path = Rails.root.join('spec/tmp/runner.html')
     File.open(runner_path, 'w') {|f| f << html.gsub('/assets', './assets')}
