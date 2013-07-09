@@ -26,7 +26,7 @@ namespace :spec do
     end
     html = app.response.body
     runner_path = Rails.root.join('spec/tmp/runner.html')
-    File.open(runner_path, 'w') {|f| f << html.gsub('/assets', './assets')}
+    File.open(runner_path, 'w', :external_encoding => html.encoding) { |f| f << html.gsub('/assets', './assets') }
 
     run_cmd %{phantomjs "#{File.join(File.dirname(__FILE__), 'runner.js')}" "file://#{runner_path.to_s}?spec=#{spec_filter}"}
   end
