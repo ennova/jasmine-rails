@@ -26,7 +26,7 @@ module JasmineRails
 
       FileUtils.mkdir_p File.dirname(source_path)
       Rails.logger.debug "Compiling #{source} to #{source_path}"
-      File.open(source_path, 'wb') do |f|
+      File.open(source_path, 'wb', :external_encoding => content.encoding) do |f|
         if Rails::VERSION::MAJOR == 4 && !Rails.env.test? && source == 'jasmine-specs.js'
           f << ''
         else
