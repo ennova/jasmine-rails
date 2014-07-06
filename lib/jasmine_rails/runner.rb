@@ -15,7 +15,7 @@ module JasmineRails
           FileUtils.mkdir_p JasmineRails.tmp_dir
           runner_path = JasmineRails.tmp_dir.join('runner.html')
           asset_prefix = Rails.configuration.assets.prefix.gsub(/\A\//,'')
-          File.open(runner_path, 'w') {|f| f << html.gsub("/#{asset_prefix}", "./#{asset_prefix}")}
+          File.open(runner_path, 'w') {|f| f << html.gsub(%r{(["'])/#{asset_prefix}}, "\\1./#{asset_prefix}")}
 
           phantomjs_runner_path = File.join(File.dirname(__FILE__), '..', 'assets', 'javascripts', 'jasmine-runner.js')
           phantomjs_cmd = JasmineRails.use_phantom_gem? ? Phantomjs.path : 'phantomjs'
